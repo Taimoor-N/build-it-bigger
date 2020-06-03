@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="build-it-bigger/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend/backend.iml" filepath="$PROJECT_DIR$/.idea/modules/backend/backend.iml" group="build-it-bigger/backend" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/build-it-bigger.iml" filepath="$PROJECT_DIR$/.idea/modules/build-it-bigger.iml" group="build-it-bigger" />
+    </modules>
+  </component>
+</project>

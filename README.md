@@ -1,2 +1,2 @@
-# joker
-Final project of "Gradle for Android and Java" course - Build it Bigger
+# Build it Bigger
+Final project of "Gradle for Android and Java" course
