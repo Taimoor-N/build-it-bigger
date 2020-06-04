@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
       <module name="backend" target="1.7" />
+      <module name="javaJokesLib" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>
