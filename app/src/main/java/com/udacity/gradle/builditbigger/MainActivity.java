@@ -6,15 +6,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.android.androidjokeslib.JokeActivity;
 import com.example.android.androidjokeslib.util.Constants;
-import com.example.android.javajokeslib.Jokes;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
@@ -22,6 +19,7 @@ import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -60,9 +58,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
+    public static class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
         private MyApi myApiService = null;
-        private Context context;
+        private String retrievedJoke = null;
+        private WeakReference<Context> context;
+
+        public String getRetrievedJoke() {
+            return retrievedJoke;
+        }
 
         @Override
         protected String doInBackground(Context... params) {
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 myApiService = builder.build();
             }
 
-            context = params[0];
+            context = new WeakReference<>(params[0]);
 
             try {
                 return myApiService.getJoke().execute().getData();
@@ -92,9 +95,11 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Intent intent = new Intent(context, JokeActivity.class);
-            intent.putExtra(Constants.INTENT_JOKE_TEXT, result);
-            startActivity(intent);
+            retrievedJoke = result;
+            Intent intent = new Intent(context.get(), JokeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Constants.INTENT_JOKE_TEXT, retrievedJoke);
+            context.get().startActivity(intent);
         }
     }
 
