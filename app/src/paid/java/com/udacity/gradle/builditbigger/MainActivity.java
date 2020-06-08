@@ -4,14 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.android.androidjokeslib.JokeActivity;
 import com.example.android.androidjokeslib.util.Constants;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
@@ -23,6 +27,8 @@ import java.lang.ref.WeakReference;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +59,15 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void tellJoke(View view) {
+    public void tellJoke(final View view) {
         new EndpointsAsyncTask().execute(this);
+    }
+
+    private static void launchJokeActivityWithJoke(Context context, String joke) {
+        Intent intent = new Intent(context, JokeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(Constants.INTENT_JOKE_TEXT, joke);
+        context.startActivity(intent);
     }
 
 
@@ -96,10 +109,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             retrievedJoke = result;
-            Intent intent = new Intent(context.get(), JokeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Constants.INTENT_JOKE_TEXT, retrievedJoke);
-            context.get().startActivity(intent);
+            launchJokeActivityWithJoke(context.get(), result);
         }
     }
 
